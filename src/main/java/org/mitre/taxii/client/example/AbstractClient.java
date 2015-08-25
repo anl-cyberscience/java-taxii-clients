@@ -1,7 +1,6 @@
 package org.mitre.taxii.client.example;
 
 import gov.anl.cfm.logging.CFMLogFields;
-import gov.anl.cfm.logging.CFMLogFields.State;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -37,9 +36,7 @@ import org.mitre.taxii.messages.TaxiiXml;
 import org.mitre.taxii.messages.xml11.ObjectFactory;
 import org.mitre.taxii.messages.xml11.PythonTextOutput;
 import org.mitre.taxii.messages.xml11.TaxiiXmlFactory;
-import org.mitre.taxii.util.Validation;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import org.mitre.taxii.query.DefaultQuery;
 
 /**
  * Provides a set of common command line handling methods and other things
@@ -48,18 +45,20 @@ import org.xml.sax.SAXParseException;
  * @author jasenj1
  */
 abstract class AbstractClient {
-    final Cli cli;    
-    ObjectFactory factory = new ObjectFactory();
-    TaxiiXmlFactory txf = new TaxiiXmlFactory();
-    TaxiiXml taxiiXml;
-    HttpClient taxiiClient;
-    String defaultURL = "http://taxiitest.mitre.org/services/"; // If the "u" command line parameter is not provided, use this value.
+    protected final Cli cli;    
+    protected ObjectFactory factory = new ObjectFactory();
+    protected TaxiiXmlFactory txf = new TaxiiXmlFactory();
+    protected TaxiiXml taxiiXml;
+    protected HttpClient taxiiClient;
+    protected String defaultURL = "http://taxiitest.mitre.org/services/"; // If the "u" command line parameter is not provided, use this value.
 
     protected HttpClientContext context;
     
     
     AbstractClient() {
     	this.cli = new Cli();
+        txf.addJaxbContextPackage(DefaultQuery.class.getPackage().getName());
+
     	taxiiXml = txf.createTaxiiXml();
     }
     
@@ -193,7 +192,7 @@ abstract class AbstractClient {
 
         
         // Call the service
-        Object responseObj = taxiiClient.callTaxiiService(new URI(cmd.getOptionValue("u", defaultURL)), request, context);
+        Object responseObj = taxiiClient.callTaxiiService(new URI(cmd.getOptionValue("u", defaultURL)), request, context, null);
 
         String resp = null;
         if (cmd.hasOption("xmloutput")) {

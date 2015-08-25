@@ -184,7 +184,7 @@ public class PollClient extends AbstractClient {
         }
     }
 
-    private void handleResponse(String dest, PollResponse response) {
+    protected void handleResponse(String dest, PollResponse response) {
         try {
             if (response.isMore()) {
                 logger.info(plog,"This response has More=True, to request additional parts, use the following command:");
