@@ -57,7 +57,7 @@ import org.w3c.dom.ls.LSSerializer;
 
 public class PollClient extends AbstractClient {
 	private static final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static CFMLogFields logger;
+	protected static CFMLogFields logger;
 	private static Logger plog = LogManager.getLogger(PollClient.class.getName());
 
 
